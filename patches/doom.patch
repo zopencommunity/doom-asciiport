@@ -1,0 +1,59 @@
+diff --git i/src/config.h w/src/config.h
+index 22beb80..e4d5ffd 100644
+--- i/src/config.h
++++ w/src/config.h
+@@ -98,3 +98,5 @@
+ 
+ /* Define to the directory where all game files are located */
+ #define FILES_DIR "."
++
++#define SYS_BIG_ENDIAN
+diff --git i/src/doomgeneric_ascii.c w/src/doomgeneric_ascii.c
+index ca810d0..9ea47ab 100644
+--- i/src/doomgeneric_ascii.c
++++ w/src/doomgeneric_ascii.c
+@@ -219,6 +219,9 @@ char convertToDoomKey(char **buf)
+ 			case 'C':
+ 				(*buf)++;
+ 				return KEY_RIGHTARROW;
++	case ' ':
++		(*buf)++;
++		return KEY_USE;
+ 			case 'D':
+ 				(*buf)++;
+ 				return KEY_LEFTARROW;
+@@ -244,7 +247,7 @@ void DG_ReadInput(void)
+ 	memset(input_buffer, '\0', INPUT_BUFFER_LEN);
+ 	memset(event_buffer, '\0', 2u * EVENT_BUFFER_LEN);
+ 	event_buf_loc = event_buffer;
+-#if defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
++#if defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)) || defined(__MVS__)
+ 	struct termios oldt, newt;
+ 
+ 	/* Disable canonical mode */
+diff --git i/src/i_swap.h w/src/i_swap.h
+index d1fd754..841e0c3 100644
+--- i/src/i_swap.h
++++ w/src/i_swap.h
+@@ -20,8 +20,8 @@
+ #ifndef __I_SWAP__
+ #define __I_SWAP__
+ 
+-#ifdef ORIGCODE
+-#include "SDL_endian.h"
++#if 1 //ifdef ORIGCODE
++//#include "SDL_endian.h"
+ 
+ // Endianess handling.
+ // WAD files are stored little endian.
+@@ -31,8 +31,8 @@
+ // These are deliberately cast to signed values; this is the behaviour
+ // of the macros in the original source and some code relies on it.
+ 
+-#define SHORT(x)  ((signed short) SDL_SwapLE16(x))
+-#define LONG(x)   ((signed int) SDL_SwapLE32(x))
++#define SHORT(x)  ((signed short) __builtin_bswap16(x))
++#define LONG(x)   ((signed int) __builtin_bswap32(x))
+ 
+ // Defines for checking the endianness of the system.
+ 
