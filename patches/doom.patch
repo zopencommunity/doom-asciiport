@@ -1,5 +1,5 @@
 diff --git i/src/config.h w/src/config.h
-index 22beb80..e4d5ffd 100644
+index 4fd39cc..8b9f056 100644
 --- i/src/config.h
 +++ w/src/config.h
 @@ -98,3 +98,5 @@
@@ -9,28 +9,29 @@ index 22beb80..e4d5ffd 100644
 +
 +#define SYS_BIG_ENDIAN
 diff --git i/src/doomgeneric_ascii.c w/src/doomgeneric_ascii.c
-index ca810d0..9ea47ab 100644
+index fcefb0b..ee15ce5 100644
 --- i/src/doomgeneric_ascii.c
 +++ w/src/doomgeneric_ascii.c
-@@ -219,6 +219,9 @@ char convertToDoomKey(char **buf)
- 			case 'C':
- 				(*buf)++;
- 				return KEY_RIGHTARROW;
+@@ -364,6 +364,10 @@ static inline unsigned char convertCsiToDoomKey(const char **const buf)
+ 		return KEY_DOWNARROW;
+ 	case 'C':
+ 		return KEY_RIGHTARROW;
 +	case ' ':
-+		(*buf)++;
++		return KEY_FIRE;
++	case 'E':
 +		return KEY_USE;
- 			case 'D':
- 				(*buf)++;
- 				return KEY_LEFTARROW;
-@@ -244,7 +247,7 @@ void DG_ReadInput(void)
- 	memset(input_buffer, '\0', INPUT_BUFFER_LEN);
- 	memset(event_buffer, '\0', 2u * EVENT_BUFFER_LEN);
- 	event_buf_loc = event_buffer;
--#if defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__))
-+#if defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)) || defined(__MVS__)
- 	struct termios oldt, newt;
- 
- 	/* Disable canonical mode */
+ 	case 'D':
+ 		return KEY_LEFTARROW;
+ 	case 'H':
+@@ -439,6 +443,8 @@ static inline unsigned char convertToDoomKey(const char **const buf)
+ 	switch (**buf) {
+ 	case '\012':
+ 		return KEY_ENTER;
++	case ' ':
++		return KEY_FIRE;
+ 	case '\033':
+ 		switch (*((*buf) + 1)) {
+ 		case '[':
 diff --git i/src/i_swap.h w/src/i_swap.h
 index d1fd754..841e0c3 100644
 --- i/src/i_swap.h
