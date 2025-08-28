@@ -2,4 +2,4 @@
 
 # doom-ascii
 
-Use `zopen install doom-ascii`. Follow the instructions in https://github.com/wojciech-graj/doom-ascii. Enjoy!
+Use `zopen install doom-ascii` to install. Follow the instructions in https://github.com/wojciech-graj/doom-ascii. Enjoy!
