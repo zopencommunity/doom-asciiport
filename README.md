@@ -2,4 +2,4 @@
 
 # doom-ascii
 
-doom in ascii
+Use `zopen install doom-ascii`. Follow the instructions in https://github.com/wojciech-graj/doom-ascii. Enjoy!
